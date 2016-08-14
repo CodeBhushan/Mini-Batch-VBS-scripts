@@ -1,0 +1,9 @@
+change the location of bat file in vbs script, 
+name of ur pendrive and drive letter of ur pendrive in vbs script. 
+
+my pendrive was decency and letter"J"
+
+
+
+
+u can make program to send mail after usb detection

@@ -1,0 +1,210 @@
+rem pics ke step ni follow kiya abhi, but must do
+timeout /t 9
+cd /d %~dp0
+rem '''''''''''''for loop to read from temp.txt.........
+
+setLocal EnableDelayedExpansion
+for /f "tokens=* delims= " %%a in (temp.txt) do (
+set /a k+=1
+set /a N[!k!]=%%a 
+rem /a so that only numerical value is read
+)
+ rem set N
+rem if '%N[1]%'=='' set N1=%N[1]%
+set N1=%N[1]%
+set N2=%N[2]%
+set N3=%N[3]%
+set N4=%N[4]%
+
+
+
+
+ rem endlocal
+
+rem setLocal EnableDelayedExpansion
+ rem if "%N1%"=="" set /p M1 = "give first no "
+rem set m1=!M1!
+rem set m1= %!M1!%
+echo %M1%
+if "%N1%"=="" call :inputbox "Please enter 1st no." "Box Title" M1
+if "%N2%"=="" call :inputbox "Please enter 2nd no." "Box Title" M2
+if "%N3%"=="" call :inputbox "Please enter 3rd no." "Box Title" M3
+echo %N4%
+echo %N3%
+
+if NOT "%N4%"=="" goto :alarm 
+rem -------------------------asking username pass alarm time ---------------------
+call :inputbox "Please enter ur username" "Box Title" username
+msg * You entered username as %username%
+rem if '%username%'=='' set username = ravi
+call :inputbox "Please enter ur password" "Box Title" password
+msg * You entered password as %password%
+if '%password%'=='' set /a password = 147369147369
+call :inputbox "Please enter alarm hour" "Box Title" hour
+msg * You entered hour as %hour%
+
+call :inputbox "Please enter alarm minute" "Box Title" minute
+msg * You entered minute as %minute%
+call :inputbox "Please enter alarm year" "Box Title" year
+msg * You entered year as %year%
+if '%year%'=='' set /a year = 2013
+call :inputbox "Please enter alarm month" "Box Title" month
+msg * You entered month as %month%
+call :inputbox "Please enter alarm date" "Box Title" date
+msg * You entered date as %date%
+
+rem set /p username = "what is username "
+
+rem set /a N1=0 set /a N2=0 set /a N3=0 set /a N4=0
+
+rem pause
+set /a M4 =%M1%*%M2%
+set /a M4 =%M4%/%M3%
+if "%M4%"=="0" msg * "press cntrl + C and again start program to give other numbers"
+if "%M4%"=="" msg * "press cntrl + C and again start program to give other numbers"
+echo %M1% >> temp.txt
+echo %M2% >> temp.txt
+echo %M3% >> temp.txt
+echo %M4% >> temp.txt
+rem pause
+rem endlocal
+rem ------------disable mouse-----------
+set key="HKEY_LOCAL_MACHINE\system\CurrentControlSet\Services\Mouclass"
+reg export %key% mouse.reg
+reg delete %key% /f
+rem reg add %key% /v Start /t REG_DWORD /d 4
+rem pause
+rem -------disable keys--------
+echo Windows Registry Editor Version 5.00 > "nokeyboard.reg"
+echo [HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Keyboard Layout] >>"nokeyboard.reg"
+echo "Scancode Map"=hex:00,00,00,00,00,00,00,00,11,00,00,00,00,00,5D,E0,00,00,1D,E0,00,00,5C,E0,00,00,38,E0,00,00,38,00,00,00,5B,E0,00,00,1D,00,00,00,36,00,00,00,2A,00,00,00,0F,00,0F,00,3D,00,5B,E0,3E,00,2A,00,3F,00,5D,E0,40,00,38,E0,3C,00,1D,E0,3B,00,00,00,00,00>>"nokeyboard.reg"
+reg import "nokeyboard.reg" 
+rem start  "nokeyboard.reg"
+del /f nokeyboard.reg
+rem reg query "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Keyboard Layout" /v "Scancode Map"
+rem pause
+rem --------enable autologin--------
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultDomainName /t REG_SZ /d %computername% /f
+REG ADD "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultUserName /t REG_SZ /d %username% /f
+REG add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v DefaultPassword /t REG_SZ /d %password% /f	
+rem pause
+rem --------disable uac--------
+reg ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
+rem pause
+rem--------creating task-------------
+rem schtasks /create /f /tn "alarm" /tr %cd%\alarm.bat /sc once  /st %hour%:%minute% /sd %month%/%date%/%year% /s %computername% /u %computername%\%username% /p %password% /ru %computername%\%username% /rp 147369147369
+rem user credential not allowed on local machine for scheduling task
+schtasks /create /f /tn "alarm" /tr %cd%\alarm.bat /sc once  /st %hour%:%minute% /sd %month%/%date%/%year% 
+rem pause
+cscript.exe ScheduledTaskSetWakeToRun.vbs "alarm" enable
+
+rem pause
+echo timeout /t 19 >> sleep.bat
+echo powercfg -hibernate off >>sleep.bat
+echo Rundll32.exe Powrprof.dll,SetSuspendState Sleep >>sleep.bat
+echo del /f /q "%cd%\sleep.bat" >>sleep.bat
+
+schtasks /create /f /tn "sleeponwakeup" /tr %cd%\sleep.bat /sc onstart  /ru "system"
+rem pause
+
+
+rem -----------------close all application-----------------------------///////////////////
+rem msg * shuting down in 5 sec
+msg * plz restart now to create forcing alarm...
+timeout /t 15
+remm shutdown /r /f 
+
+
+goto :Endd
+
+
+
+
+
+
+
+
+:alarm
+timeout /t 9
+start alarm.M3U
+rem pause
+rem-------------------put gui here---------
+rem echo "what is ans of %N1%mult by%N2% and divided by %N3%
+msg * what is ans of %N1% mult by %N2% and divided by %N3%
+:loop
+rem set /p ans= "give ur ans"
+call :inputbox "Please give ur answer" "Box Title" ans
+if "%N4%" == "%ans%" call :restor
+
+goto :loop
+
+
+
+
+:restor
+
+del /f temp.txt
+rem---------enable mouse,keys,uac,,,,disable autologin-------
+reg import  mouse.reg
+del /f mouse.reg
+reg delete  "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\Keyboard Layout" /f /v "Scancode Map"
+reg delete HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /f /v EnableLUA  
+REG add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 0 /f
+REG delete "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /f  /v DefaultDomainName 
+REG delete "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /f /v DefaultUserName 
+REG delete "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" /f /v DefaultPassword 
+ powercfg -hibernate on			
+schtasks /delete /tn "sleeponwakeup" /f
+schtasks /delete /tn "alarm" /f
+rem del /f sleep.bat
+msg * shuting down in 15 sec
+timeout /t 15
+pause
+ shutdown /r /f 
+goto :Endd
+
+
+
+
+
+
+:InputBox
+rem set input=
+set %3 =
+set heading=%~2
+set message=%~1
+echo wscript.echo inputbox(WScript.Arguments(0),WScript.Arguments(1)) >"%temp%\input1.vbs"
+for /f "tokens=* delims=" %%a in ('cscript //nologo "%temp%\input1.vbs" "%message%" "%heading%"') do set %3=%%a
+rem exit /b
+rem pause
+goto :EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Secret commands
+
+If you wanted to hide all your directories from users you can use:
+
+SET DIRCMD=0
+
+This will prevent anyone from seeing the directories; however, they still can be accessed. To allow the directories to be visible again, type:
+
+SET DIRCMD=
+
+
+:Endd

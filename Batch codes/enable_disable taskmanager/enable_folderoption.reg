@@ -1,0 +1,16 @@
+
+HELLO!!!- DUE TO THIS ACTIONS IF YOUR FOLDER OPTIONS DISABLED THEN RUN THE FOLLOWING FILE (it will occur in only some versions of registry)
+
+
+Copy the code into Note Pad:-
+---------------------------------------------------------------------------------------------
+Windows Registry Editor Version 5.00
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoFolderOptions"=dword:0000000
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer]
+"NoFolderOptions"=dword:0000000
+---------------------------------------------------------------------------------------------
+Now save the file with any name with Extension .reg and run the File, and restart your system to apply registry modifications, thats it your willbe solved
+
+
+WARNING: Please Backup your registry before attemting this hack. Changes to registry may lead to system failure.
