@@ -1,0 +1,4 @@
+may z key to sequence of key by changing registry (required scanmap can be got using autohotkeysoftware)
+
+when u want to use z normally, press sequence of keys to run shortcut to a file which will  delete the sscancodemap 4m registry
+or using autohotkeyscript- when  z is pressed, it should send keys which is hot key of shortcut of file to be run(Switch2vlc.vbs here)
