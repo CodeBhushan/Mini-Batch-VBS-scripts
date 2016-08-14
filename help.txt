@@ -1,0 +1,8 @@
+there is clipbrd program in window(not installed defaultly), to see the copy history,
+.. there are third party softwares like clipmagic also
+
+detecting pendrive inserttion and running a batch file or other program like mailing can help in security
+
+
+
+perhaps usb port can also be pasword protected in recent window
