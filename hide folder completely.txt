@@ -1,0 +1,5 @@
+enter into required folder using window.
+
+then from command prompt hide that folder, and u r done
+
+now if u go back to window and press back space to go to above folder, u will not find that folder
